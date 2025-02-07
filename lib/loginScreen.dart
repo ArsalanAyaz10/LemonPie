@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:lemonpieui/emailVerifyScreen.dart';
 
 import 'SignUpScreen.dart';
 
 
-class Loginscreen extends StatelessWidget {
+class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
+
+  @override
+  State<Loginscreen> createState() => _LoginscreenState();
+}
+
+class _LoginscreenState extends State<Loginscreen> {
+
+  bool _viewPassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +50,6 @@ class Loginscreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       children: [
-
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: "Email",
@@ -56,60 +64,62 @@ class Loginscreen extends StatelessWidget {
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: "Password",
-                            suffixIcon: const Icon(Icons.remove_red_eye_sharp),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.remove_red_eye_sharp),
+                              onPressed: (){
+                                setState(() {
+                                  _viewPassword = true;
+                                });
+                              },
+                            ),
                             filled: true,
                             fillColor: const Color.fromARGB(255, 246, 246, 246),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
                           ),
-                          obscureText: true,
+                          obscureText: _viewPassword,
                         ),
                         const SizedBox(height: 20),
-                        Container(
-                          width: double.infinity,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 254, 204, 48),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "LOGIN",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
+                        InkWell(
+                          onTap:() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Emailverifyscreen()),
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 254, 204, 48),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child:  const Center(
+                              child: Text(
+                                "LOGIN",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 254, 204, 48),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Don't have an account? "),
-                            InkWell(
-                              onTap:() {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const Signupscreen()),
-                                );
-                              },
-                              child: Text(
-                                "Sign Up!",
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 254, 204, 48),
-                                ),
-                              ),
+                        InkWell(
+                          onTap:() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Emailverifyscreen()),
+                            );
+                          },
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 254, 204, 48),
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
