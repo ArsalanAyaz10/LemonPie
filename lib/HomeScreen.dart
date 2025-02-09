@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_product_card/flutter_product_card.dart';
-
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'emailVerifyScreen.dart';
 import 'loginScreen.dart';
 
 class Homescreen extends StatefulWidget {
@@ -12,6 +13,40 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   bool isDark = false; // Default is light mode
+ late PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+
+ List<Widget> _BuildScreen(){
+   return[
+     const HomeUI(), // Home screen
+     const Center(child: Text("Menu"),),
+     const Center(child: Text("Cart")),
+   ];
+ }
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.home),
+        title: "Home",
+        activeColorPrimary: Colors.brown,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.restaurant_menu),
+        title: "Menu",
+        activeColorPrimary: Colors.orange,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.shopping_cart),
+        title: "Cart",
+        activeColorPrimary: Colors.red,
+        inactiveColorPrimary: Colors.grey,
+      ),
+
+    ];
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,29 +59,57 @@ class _HomescreenState extends State<Homescreen> {
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: const Text("LemonPie"),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  isDark = !isDark; // Toggle theme
-                });
-              },
-              icon: Icon(
-                isDark ? Icons.dark_mode : Icons.light_mode,
-                color: Colors.black87,
+      title: const Text(
+      "LemonPie",
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+      ),
+      centerTitle: true,
+      backgroundColor: Colors.transparent, // Transparent background
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFff9a9e), Color(0xFFfad0c4)], // Gradient effect
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      ),
+      elevation: 4, // Slight shadow for depth
+      leading: GestureDetector(
+        onTap: (){
+          Navigator.pop(context);
+        },
+        child: IconButton(
+          icon: const Icon(Icons.arrow_back, size: 26),
+          onPressed: () {
+          },
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: CircleAvatar(
+            radius: 19,
+            backgroundColor: Colors.white, // Light background for contrast
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.person, color: Colors.black), // Profile icon
+                onPressed: () {},
               ),
             ),
-            Icon(
-              Icons.shopping_cart_sharp,
-              color: isDark ? Colors.white : Colors.black, // Changes color dynamically
-            ),
-          ],
+          ),
         ),
-        body: const HomeUI(),
+      ],
+    ),
+
+    body: PersistentTabView(
+          context,
+          controller: _controller,
+          screens: _BuildScreen(),
+          items: _navBarsItems(),
+          backgroundColor: Colors.transparent,
+          navBarStyle: NavBarStyle.style12 // Change style as needed
+        ),
       ),
     );
   }
@@ -101,8 +164,8 @@ class HomeUI extends StatelessWidget {
                       productName: "Blue-Berry Pie",
                       width: 200,
                       height: 320,
-                      price: 19.99,
-                      currency: "\$",
+                      price: 500,
+                      currency: "\Rs.",
                       onTap: () {
                         Navigator.push(
                           context,
@@ -122,8 +185,8 @@ class HomeUI extends StatelessWidget {
                       productName: "Chocolate Bagel",
                       width: 200,
                       height: 320,
-                      price: 13.99,
-                      currency: "\$",
+                      price:660,
+                      currency: "\Rs.",
                       onTap: () {},
                       imageUrl:
                       "https://nourishingniki.com/wp-content/uploads/2024/06/Chocolate-Bagels-17-768x1024.jpg",
@@ -138,8 +201,8 @@ class HomeUI extends StatelessWidget {
                       productName: "French Croissants",
                       width: 200,
                       height: 320,
-                      price: 9.59,
-                      currency: "\$",
+                      price: 650,
+                      currency: "\Rs.",
                       onTap: () {},
                       imageUrl: "https://media.istockphoto.com/id/1456564684/photo/three-stacked-fresh-croissants-french-bakery-sweet-dough-dessert-composition-with-crumbs.jpg?s=2048x2048&w=is&k=20&c=T0Ek9fH6jKsJWbAVCvFQCk21RsY7che5MfWj6IUjz58=",
                       onFavoritePressed: () {},
@@ -180,14 +243,14 @@ class HomeUI extends StatelessWidget {
                 child: Row(
                   children: [
                     ProductCard(
-                      productName: "Blue-Berry Pie",
+                      productName: "Kheer",
                       width: 200,
                       height: 320,
-                      price: 19.99,
-                      currency: "\$",
+                      price: 300,
+                      currency: "\Rs.",
                       onTap: () {},
                       imageUrl:
-                      "https://media.istockphoto.com/id/2169276230/photo/apple-pie.jpg?s=2048x2048&w=is&k=20&c=tsNpCPX_ZaUWYdKIGaRd9RDOBB9xhweM8HlgpsRUrd8=",
+                      "https://untoldrecipesbynosheen.com/wp-content/uploads/2024/05/kheer-main-2.jpg",
                       onFavoritePressed: () {},
                       rating: 4.2,
                       isAvailable: true,
@@ -196,14 +259,14 @@ class HomeUI extends StatelessWidget {
                       categoryName: '',
                     ),
                     ProductCard(
-                      productName: "Chocolate Bagel",
+                      productName: "Kulfa",
                       width: 200,
                       height: 320,
-                      price: 13.99,
-                      currency: "\$",
+                      price: 200,
+                      currency: "\Rs.",
                       onTap: () {},
                       imageUrl:
-                      "https://nourishingniki.com/wp-content/uploads/2024/06/Chocolate-Bagels-17-768x1024.jpg",
+                      "https://untoldrecipesbynosheen.com/wp-content/uploads/2023/06/kulfi-main-2-scaled.jpg",
                       onFavoritePressed: () {},
                       rating: 4.0,
                       isAvailable: true,
@@ -212,13 +275,13 @@ class HomeUI extends StatelessWidget {
                       categoryName: '',
                     ),
                     ProductCard(
-                      productName: "French Croissants",
+                      productName: "Halwa",
                       width: 200,
                       height: 320,
-                      price: 9.59,
-                      currency: "\$",
+                      price: 150,
+                      currency: "\Rs.",
                       onTap: () {},
-                      imageUrl: "https://media.istockphoto.com/id/1456564684/photo/three-stacked-fresh-croissants-french-bakery-sweet-dough-dessert-composition-with-crumbs.jpg?s=2048x2048&w=is&k=20&c=T0Ek9fH6jKsJWbAVCvFQCk21RsY7che5MfWj6IUjz58=",
+                      imageUrl: "https://untoldrecipesbynosheen.com/wp-content/uploads/2022/10/pumpkin-halwa-main-1.jpg",
                       onFavoritePressed: () {},
                       rating: 4.9,
                       isAvailable: true,
@@ -226,12 +289,14 @@ class HomeUI extends StatelessWidget {
                       textColor: Colors.black,
                       categoryName: '',
                     ),
+
                   ],
                 ),
               ),
             ],
           ),
         ),
+
       ),
     );
   }
