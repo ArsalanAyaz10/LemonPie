@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lemonpieui/HomeScreen.dart';
+import 'package:lemonpieui/Screens/HomeScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Emailverifyscreen extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_product_card/flutter_product_card.dart';
+import 'package:lemonpieui/Screens/cart.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'emailVerifyScreen.dart';
 import 'loginScreen.dart';
 
 class Homescreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _HomescreenState extends State<Homescreen> {
    return[
      const HomeUI(), // Home screen
      const Center(child: Text("Menu"),),
-     const Center(child: Text("Cart")),
+     const CartUI(),
    ];
  }
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -121,8 +121,8 @@ class HomeUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView( // En
-        scrollDirection: Axis.vertical,// ables scrolling to avoid overflow
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(

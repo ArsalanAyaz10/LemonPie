@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'loginScreen.dart';
-import 'SignUpScreen.dart';
+import 'package:flutter_cart/cart.dart';
+import '/Screens/loginScreen.dart';
+import '/Screens/SignUpScreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var cart = FlutterCart();
+  await cart.initializeCart(isPersistenceSupportEnabled: true);
   runApp(const MyApp());
 }
 
@@ -11,13 +15,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: BuildUI(),
       ),
     );
   }
 }
+
 class BuildUI extends StatelessWidget {
   const BuildUI({super.key});
 

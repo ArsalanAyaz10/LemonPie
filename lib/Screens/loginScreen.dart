@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lemonpieui/emailVerifyScreen.dart';
+import 'package:lemonpieui/Screens/emailVerifyScreen.dart';
 
 import 'SignUpScreen.dart';
 
