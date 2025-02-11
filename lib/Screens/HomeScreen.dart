@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_product_card/flutter_product_card.dart';
 import 'package:lemonpieui/Screens/cart.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import '../Model/Product.dart';
+import '../Services/api_service.dart';
 import 'loginScreen.dart';
 
 class Homescreen extends StatefulWidget {
@@ -115,14 +117,27 @@ class _HomescreenState extends State<Homescreen> {
   }
 }
 
-class HomeUI extends StatelessWidget {
+
+class HomeUI extends StatefulWidget {
   const HomeUI({super.key});
+
+  @override
+  State<HomeUI> createState() => _HomeUIState();
+}
+
+class _HomeUIState extends State<HomeUI> {
+  late Future<List<Product>> _futureProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureProducts = ApiService.fetchProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
@@ -131,10 +146,7 @@ class HomeUI extends StatelessWidget {
               const SizedBox(height: 15),
               const Text(
                 "Crave Choose Cherish!",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
               ),
               const SizedBox(height: 10),
               const SearchBar(
@@ -150,153 +162,49 @@ class HomeUI extends StatelessWidget {
               const SizedBox(height: 10),
               const Text(
                 "Popular Items",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
               ),
               const SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ProductCard(
-                      productName: "Blue-Berry Pie",
-                      width: 200,
-                      height: 320,
-                      price: 500,
-                      currency: "\Rs.",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Loginscreen()),
-                        );
-                      },
-                      imageUrl:
-                      "https://media.istockphoto.com/id/2169276230/photo/apple-pie.jpg?s=2048x2048&w=is&k=20&c=tsNpCPX_ZaUWYdKIGaRd9RDOBB9xhweM8HlgpsRUrd8=",
-                      onFavoritePressed: () {},
-                      rating: 4.2,
-                      isAvailable: true,
-                      cardColor: Colors.white,
-                      textColor: Colors.black,
-                      categoryName: '',
-                    ),
-                    ProductCard(
-                      productName: "Chocolate Bagel",
-                      width: 200,
-                      height: 320,
-                      price:660,
-                      currency: "\Rs.",
-                      onTap: () {},
-                      imageUrl:
-                      "https://nourishingniki.com/wp-content/uploads/2024/06/Chocolate-Bagels-17-768x1024.jpg",
-                      onFavoritePressed: () {},
-                      rating: 4.0,
-                      isAvailable: true,
-                      cardColor: Colors.white,
-                      textColor: Colors.black,
-                      categoryName: '',
-                    ),
-                    ProductCard(
-                      productName: "French Croissants",
-                      width: 200,
-                      height: 320,
-                      price: 650,
-                      currency: "\Rs.",
-                      onTap: () {},
-                      imageUrl: "https://media.istockphoto.com/id/1456564684/photo/three-stacked-fresh-croissants-french-bakery-sweet-dough-dessert-composition-with-crumbs.jpg?s=2048x2048&w=is&k=20&c=T0Ek9fH6jKsJWbAVCvFQCk21RsY7che5MfWj6IUjz58=",
-                      onFavoritePressed: () {},
-                      rating: 4.9,
-                      isAvailable: true,
-                      cardColor: Colors.white,
-                      textColor: Colors.black,
-                      categoryName: '',
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Recommended",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Spacer(),
-                  Text(
-                    textAlign: TextAlign.right,
-                    "See All",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ProductCard(
-                      productName: "Kheer",
-                      width: 200,
-                      height: 320,
-                      price: 300,
-                      currency: "\Rs.",
-                      onTap: () {},
-                      imageUrl:
-                      "https://untoldrecipesbynosheen.com/wp-content/uploads/2024/05/kheer-main-2.jpg",
-                      onFavoritePressed: () {},
-                      rating: 4.2,
-                      isAvailable: true,
-                      cardColor: Colors.white,
-                      textColor: Colors.black,
-                      categoryName: '',
-                    ),
-                    ProductCard(
-                      productName: "Kulfa",
-                      width: 200,
-                      height: 320,
-                      price: 200,
-                      currency: "\Rs.",
-                      onTap: () {},
-                      imageUrl:
-                      "https://untoldrecipesbynosheen.com/wp-content/uploads/2023/06/kulfi-main-2-scaled.jpg",
-                      onFavoritePressed: () {},
-                      rating: 4.0,
-                      isAvailable: true,
-                      cardColor: Colors.white,
-                      textColor: Colors.black,
-                      categoryName: '',
-                    ),
-                    ProductCard(
-                      productName: "Halwa",
-                      width: 200,
-                      height: 320,
-                      price: 150,
-                      currency: "\Rs.",
-                      onTap: () {},
-                      imageUrl: "https://untoldrecipesbynosheen.com/wp-content/uploads/2022/10/pumpkin-halwa-main-1.jpg",
-                      onFavoritePressed: () {},
-                      rating: 4.9,
-                      isAvailable: true,
-                      cardColor: Colors.white,
-                      textColor: Colors.black,
-                      categoryName: '',
-                    ),
 
-                  ],
-                ),
+              FutureBuilder<List<Product>>(
+                future: _futureProducts,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Error: ${snapshot.error}"));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text("No products available"));
+                  }
+
+                  List<Product> products = snapshot.data!;
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: products
+                          .map((product) => ProductCard(
+                        productName: product.productName,
+                        width: 200,
+                        height: 320,
+                        price: product.price,
+                        currency: product.currency,
+                        rating: product.rating,
+                        isAvailable: product.isAvailable,
+                        onTap: () {},
+                        onFavoritePressed: () {},
+                        cardColor: Colors.white,
+                        textColor: Colors.black,
+                        categoryName: '',
+                        imageUrl: '',
+                      ))
+                          .toList(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-
       ),
     );
   }
