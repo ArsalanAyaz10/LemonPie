@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../Model/Product.dart';
 
 class ApiService {
@@ -8,16 +7,27 @@ class ApiService {
 
   static Future<List<Product>> fetchProducts() async {
     try {
-      final response = await http.get(Uri.parse(baseUrl));
+      final response = await http.get(
+        Uri.parse(baseUrl),
+        headers: {
+          "Content-Type": "application/json", // Ensure correct format
+          "Accept": "application/json"
+        },
+      );
 
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
+
+        if (jsonData.isEmpty) {
+          throw Exception("No products found.");
+        }
+
         return jsonData.map((item) => Product.fromJson(item)).toList();
       } else {
         throw Exception("Failed to load products: ${response.statusCode}");
       }
     } catch (e) {
-      throw Exception("Error: $e");
+      throw Exception("API Error: $e");
     }
   }
 }

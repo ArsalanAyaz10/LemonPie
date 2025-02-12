@@ -1,10 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_product_card/flutter_product_card.dart';
 import 'package:lemonpieui/Screens/cart.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import '../Model/Product.dart';
 import '../Services/api_service.dart';
-import 'loginScreen.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -15,7 +15,7 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   bool isDark = false; // Default is light mode
- late PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+ late final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
  List<Widget> _BuildScreen(){
    return[
@@ -47,8 +47,6 @@ class _HomescreenState extends State<Homescreen> {
 
     ];
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -176,13 +174,14 @@ class _HomeUIState extends State<HomeUI> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text("No products available"));
                   }
-
                   List<Product> products = snapshot.data!;
                   return SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+
                     child: Row(
                       children: products
                           .map((product) => ProductCard(
+                        imageUrl: product.imageUrl,
                         productName: product.productName,
                         width: 200,
                         height: 320,
@@ -195,7 +194,6 @@ class _HomeUIState extends State<HomeUI> {
                         cardColor: Colors.white,
                         textColor: Colors.black,
                         categoryName: '',
-                        imageUrl: '',
                       ))
                           .toList(),
                     ),
