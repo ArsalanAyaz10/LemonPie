@@ -5,8 +5,10 @@ class Product {
   final String imageUrl;
   final double rating;
   final bool isAvailable;
+  final String category;
 
   Product({
+    required this.category,
     required this.productName,
     required this.price,
     required this.currency,
@@ -23,6 +25,7 @@ class Product {
       imageUrl: json['image'] ?? "", // Ensure valid URL or Base64
       rating: double.tryParse(json['rating'].toString()) ?? 0.0,
       isAvailable: json['is_available'].toString() == "1" || json['is_available'] == 1,
+      category: json['category'] ?? "",
     );
   }
 }
