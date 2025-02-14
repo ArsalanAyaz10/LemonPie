@@ -153,17 +153,13 @@ class _HomeUIState extends State<HomeUI> {
                 padding: WidgetStatePropertyAll<EdgeInsets>(
                     EdgeInsets.symmetric(horizontal: 16.0)),
                 enabled: true,
-                backgroundColor:
-                WidgetStatePropertyAll(Color.fromARGB(255, 250, 250, 250)),
+                backgroundColor: WidgetStatePropertyAll(
+                    Color.fromARGB(255, 250, 250, 250)),
                 leading: Icon(Icons.search),
               ),
               const SizedBox(height: 10),
-              const Text(
-                "Popular Items",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-              ),
-              const SizedBox(height: 10),
 
+              // Single FutureBuilder for all categories
               FutureBuilder<List<Product>>(
                 future: _futureProducts,
                 builder: (context, snapshot) {
@@ -174,29 +170,61 @@ class _HomeUIState extends State<HomeUI> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text("No products available"));
                   }
-                  List<Product> products = snapshot.data!;
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
 
-                    child: Row(
-                      children: products
-                          .map((product) => ProductCard(
-                        imageUrl: product.imageUrl,
-                        productName: product.productName,
-                        width: 200,
-                        height: 320,
-                        price: product.price,
-                        currency: product.currency,
-                        rating: product.rating,
-                        isAvailable: product.isAvailable,
-                        onTap: () {},
-                        onFavoritePressed: () {},
-                        cardColor: Colors.white,
-                        textColor: Colors.black,
-                        categoryName: '',
-                      ))
-                          .toList(),
-                    ),
+                  List<Product> products = snapshot.data!;
+
+                  // Define categories once
+                  List<String> categories = ["Cakes", "Cookies", "Biscuits", "Pastries", "Desserts"];
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: categories.map((category)
+                    {
+                      List<Product> categoryProducts = products
+                          .where((product) => product.category == category)
+                          .toList();
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          Text(
+                            category,
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                          ),
+                          const SizedBox(height: 10),
+                          categoryProducts.isEmpty
+                              ? const Center(child: Text("No products available"))
+                              : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: categoryProducts
+                                  .map((product) => SizedBox(
+                                width: 200,
+                                height: 340,
+                                child: ProductCard(
+                                  imageUrl: product.imageUrl,
+                                  productName: product.productName,
+                                  width: 200,
+                                  height: 355,
+                                  price: product.price,
+                                  currency: product.currency,
+                                  rating: product.rating,
+                                  isAvailable: product.isAvailable,
+                                  onTap: () {},
+                                  onFavoritePressed: () {},
+                                  cardColor: Colors.white,
+                                  textColor: Colors.black,
+                                  categoryName: product.category,
+                                  discountPercentage: 25,
+                                ),
+                              ))
+                                  .toList(),
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
                   );
                 },
               ),
@@ -207,3 +235,4 @@ class _HomeUIState extends State<HomeUI> {
     );
   }
 }
+
