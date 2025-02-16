@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "32474682803",
+    "firebase_url": "https://lemonpie-db8d1-default-rtdb.firebaseio.com",
+    "project_id": "lemonpie-db8d1",
+    "storage_bucket": "lemonpie-db8d1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32474682803:android:57cbba0d0b2e686bb427c6",
+        "android_client_info": {
+          "package_name": "com.example.lemonpieui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5svRuorI3JoCEZcwcw-srADz53SsIb_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,2 @@
+E:/lemonPieUI/lemonpieui/android/app/.cxx/Debug/1b5w4s3l/x86_64/CMakeFiles/edit_cache.dir
+E:/lemonPieUI/lemonpieui/android/app/.cxx/Debug/1b5w4s3l/x86_64/CMakeFiles/rebuild_cache.dir

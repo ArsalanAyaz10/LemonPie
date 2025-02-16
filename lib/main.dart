@@ -1,13 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cart/cart.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '/Screens/loginScreen.dart';
 import '/Screens/SignUpScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var cart = FlutterCart();
-  await cart.initializeCart(isPersistenceSupportEnabled: true);
-  runApp(const MyApp());
+  try {
+    await Firebase.initializeApp();
+    runApp(const MyApp());
+  } catch (e) {
+    if (kDebugMode) {
+      print("Firebase initialization failed: $e");
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -103,7 +110,7 @@ class BuildUI extends StatelessWidget {
                       onTap:() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Signupscreen()),
+                          MaterialPageRoute(builder: (context) =>  SignupScreen()),
                         );
                       },
                       child: Container(

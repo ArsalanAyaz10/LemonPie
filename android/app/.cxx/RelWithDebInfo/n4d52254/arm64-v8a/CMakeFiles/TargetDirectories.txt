@@ -1,0 +1,2 @@
+E:/lemonPieUI/lemonpieui/android/app/.cxx/RelWithDebInfo/n4d52254/arm64-v8a/CMakeFiles/edit_cache.dir
+E:/lemonPieUI/lemonpieui/android/app/.cxx/RelWithDebInfo/n4d52254/arm64-v8a/CMakeFiles/rebuild_cache.dir
