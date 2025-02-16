@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_product_card/flutter_product_card.dart';
-import 'package:lemonpieui/Screens/cart.dart';
+import 'package:lemonpieui/Screens/cartScreen.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import '../Model/Product.dart';
 import '../Services/api_service.dart';
+import 'ProductScreen.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -20,7 +20,7 @@ class _HomescreenState extends State<Homescreen> {
   List<Widget> _BuildScreen(){
     return[
       const HomeUI(), // Home screen
-      const Center(child: Text("Menu"),),
+      const ProductUI(),
       const CartUI(),
     ];
   }
@@ -202,21 +202,26 @@ class _HomeUIState extends State<HomeUI> {
                                   .map((product) => SizedBox(
                                 width: 200,
                                 height: 340,
-                                child: ProductCard(
-                                  imageUrl: product.imageUrl,
-                                  productName: product.productName,
-                                  width: 200,
-                                  height: 355,
-                                  price: product.price,
-                                  currency: product.currency,
-                                  rating: product.rating,
-                                  isAvailable: product.isAvailable,
-                                  onTap: () {},
-                                  onFavoritePressed: () {},
-                                  cardColor: Colors.white,
-                                  textColor: Colors.black,
-                                  categoryName: product.category,
-                                  discountPercentage: 25,
+                                child: InkWell(
+                                  child: ProductCard(
+                                    imageUrl: product.imageUrl,
+                                    productName: product.productName,
+                                    width: 200,
+                                    height: 355,
+                                    price: product.price,
+                                    currency: product.currency,
+                                    rating: product.rating,
+                                    isAvailable: product.isAvailable,
+                                    onTap: () {},
+                                    onFavoritePressed: () {},
+                                    cardColor: Colors.white,
+                                    textColor: Colors.black,
+                                    categoryName: product.category,
+                                    discountPercentage: 25,
+                                  ),
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductUI()));
+                                  },
                                 ),
                               ))
                                   .toList(),

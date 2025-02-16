@@ -23,7 +23,6 @@ class _SignupScreenState extends State<SignupScreen> {
           password: _passwordController.text.trim(),
         );
 
-        // Navigate to Login Screen after successful signup
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Loginscreen()),
