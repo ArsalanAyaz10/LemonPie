@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../Model/Product.dart';
 
 class ApiService {
-  static const String baseUrl = "http://192.168.1.101/LemonPie/get_Product.php";
+  static const String baseUrl = "http://192.168.1.100/LemonPie/get_Product.php";
 
   static Future<List<Product>> fetchProducts() async {
     try {
