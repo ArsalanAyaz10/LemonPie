@@ -14,13 +14,12 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
-  bool isDark = false; // Default is light mode
   late final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
   List<Widget> _BuildScreen(){
     return[
       const HomeUI(), // Home screen
-      const ProductUI(),
+      const CartUI(),
       const CartUI(),
     ];
   }
@@ -50,57 +49,41 @@ class _HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: isDark ? Brightness.dark : Brightness.light,
-      ),
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: const Text(
-            "LemonPie",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent, // Transparent background
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFff9a9e), Color(0xFFfad0c4)], // Gradient effect
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          elevation: 4, // Slight shadow for depth
-          leading: GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, size: 26),
-              onPressed: () {
-              },
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: CircleAvatar(
-                radius: 19,
-                backgroundColor: Colors.white, // Light background for contrast
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.person, color: Colors.black), // Profile icon
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // appBar: AppBar(
+        //   title: const Text(
+        //     "LemonPie",
+        //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        //   ),
+        //   centerTitle: true,
+        //   backgroundColor: Colors.transparent, // Transparent background
+        //   flexibleSpace: Container(
+        //     decoration: const BoxDecoration(
+        //       gradient: LinearGradient(
+        //         colors: [Color(0xFFff9a9e), Color(0xFFfad0c4)], // Gradient effect
+        //         begin: Alignment.topLeft,
+        //         end: Alignment.bottomRight,
+        //       ),
+        //     ),
+        //   ),
+        //   actions: [
+        //     Padding(
+        //       padding: const EdgeInsets.only(right: 10),
+        //       child: CircleAvatar(
+        //         radius: 19,
+        //         backgroundColor: Colors.white, // Light background for contrast
+        //         child: Center(
+        //           child: IconButton(
+        //             icon: const Icon(Icons.person, color: Colors.black), // Profile icon
+        //             onPressed: () {},
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
 
         body: PersistentTabView(
             context,
@@ -108,10 +91,9 @@ class _HomescreenState extends State<Homescreen> {
             screens: _BuildScreen(),
             items: _navBarsItems(),
             backgroundColor: Colors.transparent,
-            navBarStyle: NavBarStyle.style12 // Change style as needed
+            navBarStyle: NavBarStyle.style12
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -202,26 +184,28 @@ class _HomeUIState extends State<HomeUI> {
                                   .map((product) => SizedBox(
                                 width: 200,
                                 height: 340,
-                                child: InkWell(
-                                  child: ProductCard(
-                                    imageUrl: product.imageUrl,
-                                    productName: product.productName,
-                                    width: 200,
-                                    height: 355,
-                                    price: product.price,
-                                    currency: product.currency,
-                                    rating: product.rating,
-                                    isAvailable: product.isAvailable,
-                                    onTap: () {},
-                                    onFavoritePressed: () {},
-                                    cardColor: Colors.white,
-                                    textColor: Colors.black,
-                                    categoryName: product.category,
-                                    discountPercentage: 25,
-                                  ),
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductUI()));
+                                child: ProductCard(
+                                  imageUrl: product.imageUrl,
+                                  productName: product.productName,
+                                  width: 200,
+                                  height: 355,
+                                  price: product.price,
+                                  currency: product.currency,
+                                  rating: product.rating,
+                                  isAvailable: product.isAvailable,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProductScreen(product: product),
+                                      ),
+                                    );
                                   },
+                                  onFavoritePressed: () {},
+                                  cardColor: Colors.white,
+                                  textColor: Colors.black,
+                                  categoryName: product.category,
+                                  discountPercentage: 25,
                                 ),
                               ))
                                   .toList(),

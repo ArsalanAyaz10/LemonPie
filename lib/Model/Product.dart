@@ -1,4 +1,5 @@
 class Product {
+  final String productId;
   final String productName;
   final double price;
   final String currency;
@@ -8,6 +9,7 @@ class Product {
   final String category;
 
   Product({
+    required this.productId,
     required this.category,
     required this.productName,
     required this.price,
@@ -19,10 +21,11 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
+      productId: json['product_id']?.toString() ?? "",
       productName: json['product_name'] ?? "Unknown",
       price: double.tryParse(json['price'].toString()) ?? 0.0,
       currency: json['currency'] ?? "USD",
-      imageUrl: json['image'] ?? "", // Ensure valid URL or Base64
+      imageUrl: json['image'] ?? "",
       rating: double.tryParse(json['rating'].toString()) ?? 0.0,
       isAvailable: json['is_available'].toString() == "1" || json['is_available'] == 1,
       category: json['category'] ?? "",

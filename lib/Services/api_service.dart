@@ -10,7 +10,7 @@ class ApiService {
       final response = await http.get(
         Uri.parse(baseUrl),
         headers: {
-          "Content-Type": "application/json", // Ensure correct format
+          "Content-Type": "application/json",
           "Accept": "application/json"
         },
       );

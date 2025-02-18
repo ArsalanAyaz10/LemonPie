@@ -1,167 +1,116 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'HomeScreen.dart';
-import 'cartScreen.dart';
 import '../Model/Product.dart';
+import 'dart:math';
+import 'dart:core';
 
+class ProductScreen extends StatefulWidget {
+  final Product product;
 
-class Productscreen extends StatefulWidget {
-  const Productscreen({super.key});
-
-
+   ProductScreen({super.key, required this.product});
 
   @override
-  State<Productscreen> createState() => _ProductscreenState();
+  State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductscreenState extends State<Productscreen> {
-
-  bool isDark = false; // Default is light mode
-  late PersistentTabController _controller = PersistentTabController(initialIndex: 0);
-
-
-  List<Widget> _buildScreen(){
-    return[
-      const HomeUI(), // Home screen
-      const Center(child: Text("Menu"),),
-      const CartUI(),
-    ];
-  }
-  List<PersistentBottomNavBarItem> _navBarsItems() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: const Icon(Icons.home),
-        title: "Home",
-        activeColorPrimary: Colors.brown,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(Icons.restaurant_menu),
-        title: "Menu",
-        activeColorPrimary: Colors.orange,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(Icons.shopping_cart),
-        title: "Cart",
-        activeColorPrimary: Colors.red,
-        inactiveColorPrimary: Colors.grey,
-      ),
-
-    ];
-  }
+class _ProductScreenState extends State<ProductScreen> {
+  bool _isAdded = false;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: isDark ? Brightness.dark : Brightness.light,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.product.productName),
+        centerTitle: true,
+        backgroundColor: WidgetStateColor.transparent,
       ),
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: const Text(
-            "LemonPie",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent, // Transparent background
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFff9a9e), Color(0xFFfad0c4)], // Gradient effect
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          elevation: 4, // Slight shadow for depth
-          leading: GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, size: 26),
-              onPressed: () {
-              },
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: CircleAvatar(
-                radius: 19,
-                backgroundColor: Colors.white, // Light background for contrast
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.person, color: Colors.black), // Profile icon
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: PersistentTabView(
-            context,
-            controller: _controller,
-            screens: _buildScreen(),
-            items: _navBarsItems(),
-            backgroundColor: Colors.transparent,
-            navBarStyle: NavBarStyle.style12 // Change style as needed
-        ),
-      ),
-    );
-  }
-}
-
-
-//PRODUCT SCREEN UI
-
-class ProductUI extends StatefulWidget {
-  const ProductUI({super.key});
-
-
-  @override
-  State<ProductUI> createState() => _ProductUIState();
-}
-
-class _ProductUIState extends State<ProductUI> {
-
-  late Future<List<Product>> _futureProducts;
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder(
-              future: _futureProducts,
-              builder: (context,snapshot){
-                if(snapshot.connectionState == ConnectionState.waiting){
-                  return const Center(child: CircularProgressIndicator(),);
-                } else if(snapshot.hasError){
-                  return Center(child: Text("Error: ${snapshot.error}"),);
-                } else if(!snapshot.hasData || snapshot.data!.isEmpty){
-                  return const Center(child: Text("No products available"));
-                }
-
-                List<Product> products = snapshot.data!;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 5,),
+                Stack(
                   children: [
-
+                    ClipPath(
+                      clipper: MyClipper(),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.30,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.product.imageUrl),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
-                );
-              },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(widget.product.productName,textAlign: TextAlign.left,style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),),
+                    InkWell(
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 50),
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: _isAdded
+                              ? const Color.fromARGB(255, 245, 30, 15)
+                              : Colors.black54,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          _isAdded
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_border_rounded,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _isAdded = !_isAdded;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const Text("1 Pound",style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                ),)
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
+
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+
+    path.lineTo(0, size.height - 60);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 60);
+    path.lineTo(size.width, 0);
+
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
+}
+
