@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lemonpieui/Screens/emailVerifyScreen.dart';
 import 'loginscreen.dart'; // Import your login screen
 
 class SignupScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  String _errorMessage = '';
+  final String _errorMessage = '';
 
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
@@ -25,12 +26,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Loginscreen()),
+          MaterialPageRoute(builder: (context) => const Emailverifyscreen()),
         );
       } on FirebaseAuthException catch (e) {
-        setState(() {
-          _errorMessage = e.message ?? "An error occurred";
-        });
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that email.');
+        }
+      } catch (e) {
+        print(e);
       }
     }
   }
