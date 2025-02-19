@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import '../Model/Product.dart';
-import 'dart:math';
 import 'dart:core';
+
+import '../Widgets/myClipper.dart';
+import '../Widgets/roundButton.dart';
 
 class ProductScreen extends StatefulWidget {
   final Product product;
 
-   ProductScreen({super.key, required this.product});
+  ProductScreen({super.key, required this.product});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -21,17 +23,16 @@ class _ProductScreenState extends State<ProductScreen> {
       appBar: AppBar(
         title: Text(widget.product.productName),
         centerTitle: true,
-        backgroundColor: WidgetStateColor.transparent,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 5,),
                 Stack(
                   children: [
                     ClipPath(
@@ -49,20 +50,26 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(widget.product.productName,textAlign: TextAlign.left,style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),),
+                    Expanded(
+                      child: Text(
+                        widget.product.productName,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     InkWell(
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 50),
-                        padding: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: _isAdded
-                              ? const Color.fromARGB(255, 245, 30, 15)
+                              ? Colors.red
                               : Colors.black54,
                           shape: BoxShape.circle,
                         ),
@@ -71,7 +78,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               ? Icons.favorite_rounded
                               : Icons.favorite_border_rounded,
                           color: Colors.white,
-                          size: 18,
+                          size: 22,
                         ),
                       ),
                       onTap: () {
@@ -82,10 +89,71 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                   ],
                 ),
-                const Text("1 Pound",style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                ),)
+                const SizedBox(height: 30),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.remove_circle_outline),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text('1'),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.add_circle_outline),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${widget.product.currency}${widget.product.price % 1 == 0 ? widget.product.price.toInt() : widget.product.price}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Product Details",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const Divider(thickness: 1, height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Reviews",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ReviewsWidget(rating: widget.product.rating),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: RoundButton(title: "Add To Cart"),
+                  ),
+                ),
               ],
             ),
           ),
@@ -95,22 +163,33 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 }
 
+class ReviewsWidget extends StatelessWidget {
+  final double rating;
+  final double starSize;
 
-class MyClipper extends CustomClipper<Path> {
+  const ReviewsWidget({
+    Key? key,
+    required this.rating,
+    this.starSize = 24.0,
+  }) : super(key: key);
+
   @override
-  Path getClip(Size size) {
-    final path = Path();
-
-    path.lineTo(0, size.height - 60);
-    path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 60);
-    path.lineTo(size.width, 0);
-
-    path.close();
-    return path;
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        double fillAmount = rating - index;
+        return Icon(
+          fillAmount >= 1
+              ? Icons.star
+              : fillAmount >= 0.5
+              ? Icons.star_half
+              : Icons.star_border,
+          color: Colors.amber,
+          size: starSize,
+        );
+      }),
+    );
   }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
