@@ -13,8 +13,7 @@ class Emailverifyscreen extends StatefulWidget {
 class _EmailverifyscreenState extends State<Emailverifyscreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
@@ -131,7 +130,6 @@ class _EmailverifyscreenState extends State<Emailverifyscreen> {
             ),
           ),
         ),
-      ),
     );
   }
 }

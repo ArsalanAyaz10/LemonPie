@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cart/flutter_cart.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'HomeScreen.dart';
+import 'loginScreen.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -14,11 +15,11 @@ class _HomescreenState extends State<Homescreen> {
   bool isDark = false; // Default is light mode
   late PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
-  List<Widget> _buildScreen(){
+  List<Widget> _BuildScreen(){
     return[
       const HomeUI(), // Home screen
-      const Center(child: Text("Menu"),),
       const CartUI(),
+      const Loginscreen(),
     ];
   }
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -30,86 +31,42 @@ class _HomescreenState extends State<Homescreen> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.restaurant_menu),
-        title: "Menu",
-        activeColorPrimary: Colors.orange,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
         icon: const Icon(Icons.shopping_cart),
         title: "Cart",
         activeColorPrimary: Colors.red,
         inactiveColorPrimary: Colors.grey,
       ),
-
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.logout),
+        title: "Logout",
+        activeColorPrimary: Colors.red,
+        inactiveColorPrimary: Colors.grey,
+        onPressed: (context) {
+          FirebaseAuth.instance.signOut().then((value) {
+            Navigator.pushAndRemoveUntil(
+              context!,
+              MaterialPageRoute(builder: (context) => const Loginscreen()),
+                  (Route<dynamic> route) => false,
+            );
+          });
+        },
+      ),
     ];
   }
-
-
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: isDark ? Brightness.dark : Brightness.light,
-      ),
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: const Text(
-            "LemonPie",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: PersistentTabView(
+              context,
+              controller: _controller,
+              screens: _BuildScreen(),
+              items: _navBarsItems(),
+              navBarStyle: NavBarStyle.style12 // Change style as needed
           ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent, // Transparent background
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFff9a9e), Color(0xFFfad0c4)], // Gradient effect
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          elevation: 4, // Slight shadow for depth
-          leading: GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, size: 26),
-              onPressed: () {
-              },
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: CircleAvatar(
-                radius: 19,
-                backgroundColor: Colors.white, // Light background for contrast
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.person, color: Colors.black), // Profile icon
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
-        body: PersistentTabView(
-            context,
-            controller: _controller,
-            screens: _buildScreen(),
-            items: _navBarsItems(),
-            backgroundColor: Colors.transparent,
-            navBarStyle: NavBarStyle.style12 // Change style as needed
-        ),
-      ),
-    );
+      );
   }
 }
 
@@ -128,7 +85,7 @@ class CartUI extends StatelessWidget {
             children: [
               const SizedBox(height: 15),
               const Text(
-                "Cart List",
+                "Cart List added",
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w400,

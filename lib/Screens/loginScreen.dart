@@ -20,6 +20,18 @@ class _LoginscreenState extends State<Loginscreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _viewPassword = false;
 
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Homescreen()),
+        );
+      }
+    });
+  }
   Future<void> _signIn() async{
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -44,8 +56,7 @@ print("LOGIN FIREBASE");
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
@@ -173,7 +184,6 @@ print("LOGIN FIREBASE");
             ),
           ),
         ),
-      ),
     );
   }
 }
