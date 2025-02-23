@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lemonpieui/Screens/emailVerifyScreen.dart';
-import 'loginscreen.dart'; // Import your login screen
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart'; // For date formatting
+import 'loginscreen.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -14,28 +15,81 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  final String _errorMessage = '';
+  final TextEditingController _dobController = TextEditingController();
+  String _errorMessage = '';
+
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      _dobController.text = DateFormat('yyyy-MM-dd').format(picked);
+    }
+  }
+
+  bool _isAtLeast18YearsOld(String dob) {
+    try {
+      DateTime birthDate = DateFormat('yyyy-MM-dd').parse(dob);
+      DateTime today = DateTime.now();
+      int age = today.year - birthDate.year;
+      if (today.month < birthDate.month || (today.month == birthDate.month && today.day < birthDate.day)) {
+        age--;
+      }
+      return age >= 18;
+    } catch (e) {
+      return false;
+    }
+  }
 
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
+      if (!_isAtLeast18YearsOld(_dobController.text)) {
+        setState(() {
+          _errorMessage = 'You must be at least 18 years old to sign up.';
+        });
+        return;
+      }
+
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
 
+        String uid = userCredential.user!.uid;
+        String username = _usernameController.text.trim();
+
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          'username': username,
+          'email': _emailController.text.trim(),
+          'dob': _dobController.text.trim(), // Store DOB
+        });
+
+        // Navigate to Login Screen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Emailverifyscreen()),
+          MaterialPageRoute(builder: (context) => const Loginscreen()),
         );
+
+        print("User registered successfully and data stored in Firestore!");
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
+          setState(() {
+            _errorMessage = 'The password provided is too weak.';
+          });
         } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
+          setState(() {
+            _errorMessage = 'The account already exists for that email.';
+          });
         }
       } catch (e) {
-        print(e);
+        setState(() {
+          _errorMessage = "Error: $e";
+        });
       }
     }
   }
@@ -50,15 +104,10 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image(
-                      width: 200,
-                      height: 200,
-                      image: AssetImage("images/lemonlogo.png"),
-                    )
-                  ],
+                const Image(
+                  width: 200,
+                  height: 200,
+                  image: AssetImage("images/lemonlogo.png"),
                 ),
                 const SizedBox(height: 5),
                 const Text(
@@ -106,6 +155,27 @@ class _SignupScreenState extends State<SignupScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty || !value.contains('@')) {
                               return 'Enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: _dobController,
+                          decoration: InputDecoration(
+                            labelText: "Date of Birth",
+                            prefixIcon: const Icon(Icons.calendar_today),
+                            filled: true,
+                            fillColor: const Color.fromARGB(255, 246, 246, 246),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () => _selectDate(context),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Select your Date of Birth';
                             }
                             return null;
                           },

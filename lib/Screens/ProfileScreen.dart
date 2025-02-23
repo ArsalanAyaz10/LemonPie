@@ -1,86 +1,120 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lemonpieui/Model/userModel.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  Future<UserModel?> getProfileInfo() async {
+    try {
+      String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+      if (uid == null) {
+        if (kDebugMode) {
+          print("No user is logged in.");
+        }
+        return null;
+      }
+
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+      if (userDoc.exists) {
+        return UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
+      } else {
+        print("User not found in Firestore.");
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.blue,
-                    child: Icon(
-                      Icons.person,
-                      size: 50,
-                      color: Colors.white,
+      body: FutureBuilder<UserModel?>(
+        future: getProfileInfo(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text("Failed to load profile data."));
+          }
+
+          UserModel user = snapshot.data!;
+
+          return SingleChildScrollView(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.blue,
+                        child: Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Text(
+                        user.username ?? 'No Name',
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: Text(
+                        user.email ?? 'No Email',
+                        style: const TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Profile Details',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 5),
+                    ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text('Full Name'),
+                      subtitle: Text(user.username ?? 'No Name'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.email),
+                      title: const Text('Email'),
+                      subtitle: Text(user.email ?? 'No Email'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.calendar_today),
+                      title: const Text('Date of Birth'),
+                      subtitle: Text(user.dateOfBirth.toString() ?? 'Unknown'),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                Center(
-                  child: Text(
-                    user?.displayName ?? 'No Name',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    user?.email ?? 'No Email',
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Divider(),
-                const SizedBox(height: 5),
-                const Text(
-                  'Profile Details',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 5),
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Full Name'),
-                  subtitle: Text(user?.displayName ?? 'No Name'),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.email),
-                  title: const Text('Email'),
-                  subtitle: Text(user?.email ?? 'No Email'),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.phone),
-                  title: const Text('Phone Number'),
-                  subtitle: Text(user?.phoneNumber ?? 'No Phone Number'),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.calendar_today),
-                  title: const Text('Creation Time'),
-                  subtitle: Text(user?.metadata.creationTime?.toString() ?? 'Unknown'),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.update),
-                  title: const Text('Last Sign-in Time'),
-                  subtitle: Text(user?.metadata.lastSignInTime?.toString() ?? 'Unknown'),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

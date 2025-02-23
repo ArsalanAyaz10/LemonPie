@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../Model/Product.dart';
 import 'dart:core';
-
 import '../Widgets/myClipper.dart';
+import '../Widgets/reviewWidget.dart';
 import '../Widgets/roundButton.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -148,9 +148,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                Center(
+                const Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: EdgeInsets.symmetric(horizontal: 30),
                     child: RoundButton(title: "Add To Cart"),
                   ),
                 ),
@@ -159,36 +159,6 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class ReviewsWidget extends StatelessWidget {
-  final double rating;
-  final double starSize;
-
-  const ReviewsWidget({
-    Key? key,
-    required this.rating,
-    this.starSize = 24.0,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(5, (index) {
-        double fillAmount = rating - index;
-        return Icon(
-          fillAmount >= 1
-              ? Icons.star
-              : fillAmount >= 0.5
-              ? Icons.star_half
-              : Icons.star_border,
-          color: Colors.amber,
-          size: starSize,
-        );
-      }),
     );
   }
 }

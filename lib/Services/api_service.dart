@@ -4,7 +4,6 @@ import '../Model/Product.dart';
 class ApiService {
   static Future<List<Product>> fetchProducts() async {
     try {
-      // Get reference to Firestore collection
       CollectionReference productsCollection =
       FirebaseFirestore.instance.collection("products");
 
