@@ -1,33 +1,28 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Model/Product.dart';
 
 class ApiService {
-  static const String baseUrl = "http://192.168.1.100/LemonPie/get_Product.php";
-
   static Future<List<Product>> fetchProducts() async {
     try {
-      final response = await http.get(
-        Uri.parse(baseUrl),
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-      );
+      // Get reference to Firestore collection
+      CollectionReference productsCollection =
+      FirebaseFirestore.instance.collection("products");
 
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = json.decode(response.body);
+      // Fetch all documents from the "products" collection
+      QuerySnapshot querySnapshot = await productsCollection.get();
 
-        if (jsonData.isEmpty) {
-          throw Exception("No products found.");
-        }
+      // Convert Firestore documents into a list of Product objects
+      List<Product> products = querySnapshot.docs.map((doc) {
+        return Product.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
 
-        return jsonData.map((item) => Product.fromJson(item)).toList();
-      } else {
-        throw Exception("Failed to load products: ${response.statusCode}");
+      if (products.isEmpty) {
+        throw Exception("No products found.");
       }
+
+      return products;
     } catch (e) {
-      throw Exception("API Error: $e");
+      throw Exception("Firestore Error: $e");
     }
   }
 }

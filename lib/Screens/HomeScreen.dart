@@ -161,23 +161,29 @@ class _HomeUIState extends State<HomeUI> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              const Text(
-                "Crave Choose Cherish!",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Crave Choose Cherish!",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      Drawer();
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ));
+                    },
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.black26,
+                      foregroundColor: Colors.yellowAccent,
+                      child: Icon(Icons.person),
+                    ),
+                  ),
+                ],
               ),
-              InkWell(
-                onTap: (){
-                  Drawer();
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const ProfileScreen(),
-                  ));
-                },
-                child: const CircleAvatar(
-                  backgroundColor: Colors.black26,
-                  foregroundColor: Colors.yellowAccent,
-                  child: Icon(Icons.person),
-                ),
-              ),
+
               const SizedBox(height: 15),
               const SearchBar(
                 elevation: WidgetStatePropertyAll(3),

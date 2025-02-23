@@ -1,0 +1,152 @@
+[
+    {
+      "id": "1",
+      "product_name": "Chocolate Cake",
+      "price": "1200.00",
+      "currency": "Rs.",
+      "rating": "4.8",
+      "is_available": "1",
+      "image": "https://static.vecteezy.com/system/resources/previews/035/063/119/non_2x/ai-generated-chocolate-cake-slice-free-png.png",
+      "category": "Cakes"
+    },
+    {
+      "id": "2",
+      "product_name": "Vanilla Cupcake",
+      "price": "250.00",
+      "currency": "Rs.",
+      "rating": "4.5",
+      "is_available": "1",
+      "image": "https://static.vecteezy.com/system/resources/previews/055/070/967/non_2x/delicious-white-cake-isolated-on-a-white-background-for-baking-and-dessert-promotions-isolated-on-transparent-background-format-png.png",
+      "category": "Cakes"
+    },
+    {
+      "id": "3",
+      "product_name": "Red Velvet Cake",
+      "price": "1500.00",
+      "currency": "Rs.",
+      "rating": "2.6",
+      "is_available": "1",
+      "image": "https://static.vecteezy.com/system/resources/previews/053/016/374/non_2x/photo-of-red-velvet-cake-slice-transparent-background-isolated-free-png.png",
+      "category": "Cakes"
+    },
+    {
+      "id": "4",
+      "product_name": "Oatmeal Cookies",
+      "price": "500.00",
+      "currency": "Rs.",
+      "rating": "4.3",
+      "is_available": "1",
+      "image": "https://p1.hiclipart.com/preview/628/402/546/chocolate-peanut-butter-cookie-anzac-biscuit-oatmeal-oatmeal-raisin-cookie-biscuits-vegetarian-cuisine-food-png-clipart.jpg",
+      "category": "Cookies"
+    },
+    {
+      "id": "5",
+      "product_name": "Peanut Butter Cookies",
+      "price": "600.00",
+      "currency": "Rs.",
+      "rating": "4.7",
+      "is_available": "1",
+      "image": "https://static.vecteezy.com/system/resources/previews/047/736/930/non_2x/peanut-butter-cookies-with-fork-marks-isolated-on-a-transparent-background-png.png",
+      "category": "Cookies"
+    },
+    {
+      "id": "6",
+      "product_name": "Chocolate Cookies",
+      "price": "700.00",
+      "currency": "Rs.",
+      "rating": "4.9",
+      "is_available": "1",
+      "image": "https://i.pinimg.com/originals/4d/47/a7/4d47a7928f2cf48aa227eba153a11ea9.png",
+      "category": "Cookies"
+    },
+    {
+      "id": "7",
+      "product_name": "Macarons",
+      "price": "400.00",
+      "currency": "Rs.",
+      "rating": "4.2",
+      "is_available": "1",
+      "image": "https://www.pngfind.com/pngs/m/528-5281006_macaron-png-transparent-images-all-macaron-png-png.png",
+      "category": "Biscuits"
+    },
+    {
+      "id": "8",
+      "product_name": "Digestive Biscuits",
+      "price": "450.00",
+      "currency": "Rs.",
+      "rating": "4.4",
+      "is_available": "1",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhyfMi_nwVQ-gUTmgwbkgflg4WGLefiL66xddODV8AkRSLb5dZNp0FZBQjqQhXGmK9Xwo&usqp=CAU",
+      "category": "Biscuits"
+    },
+    {
+      "id": "9",
+      "product_name": "Shortbread Biscuits",
+      "price": "550.00",
+      "currency": "Rs.",
+      "rating": "4.6",
+      "is_available": "1",
+      "image": "https://w7.pngwing.com/pngs/593/343/png-transparent-shortbread-cookies-food-shortbread.png",
+      "category": "Biscuits"
+    },
+    {
+      "id": "10",
+      "product_name": "Cheese Danish",
+      "price": "800.00",
+      "currency": "Rs.",
+      "rating": "4.5",
+      "is_available": "1",
+      "image": "https://img.freepik.com/premium-psd/danish-pastry-isolated-transparent-background_220739-5616.jpg",
+      "category": "Pastries"
+    },
+    {
+      "id": "11",
+      "product_name": "Puff Pastry",
+      "price": "750.00",
+      "currency": "Rs.",
+      "rating": "4.3",
+      "is_available": "1",
+      "image": "https://img.freepik.com/free-psd/two-golden-brown-flaky-croissants-delicious-bakery-treat_84443-37823.jpg",
+      "category": "Pastries"
+    },
+    {
+      "id": "12",
+      "product_name": "Cinnamon Roll",
+      "price": "900.00",
+      "currency": "Rs.",
+      "rating": "4.8",
+      "is_available": "1",
+      "image": "https://img.freepik.com/premium-psd/frosted-cinnamon-rolls-isolated-transparent-background-png-psd_888962-676.jpg",
+      "category": "Pastries"
+    },
+    {
+      "id": "13",
+      "product_name": "Gulab Jamun",
+      "price": "300.00",
+      "currency": "Rs.",
+      "rating": "4.9",
+      "is_available": "1",
+      "image": "https://img.freepik.com/premium-psd/tasty-gulab-jamun-indian-pakistani-sweet-dish-transparent-background_812337-4645.jpg",
+      "category": "Desserts"
+    },
+    {
+      "id": "14",
+      "product_name": "Rasgulla",
+      "price": "280.00",
+      "currency": "Rs.",
+      "rating": "4.7",
+      "is_available": "1",
+      "image": "https://img.freepik.com/premium-psd/sponge-rasgulla-sweets-transparent-background-png_699917-6463.jpg",
+      "category": "Desserts"
+    },
+    {
+      "id": "15",
+      "product_name": "Jalebi",
+      "price": "350.00",
+      "currency": "Rs.",
+      "rating": "4.6",
+      "is_available": "1",
+      "image": "https://thumbs.dreamstime.com/b/indian-sweet-jalebi-traditional-dessert-india-77486391.jpg",
+      "category": "Desserts"
+    }
+  ]
