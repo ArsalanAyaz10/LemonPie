@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lemonpieui/Screens/HomeScreen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Emailverifyscreen extends StatefulWidget {
   const Emailverifyscreen({super.key});
@@ -94,14 +93,7 @@ class _EmailverifyscreenState extends State<Emailverifyscreen> {
                               color: Colors.blueAccent,
                               size: 40,
                             ),
-                              onTap: () async {
-                                final Uri url = Uri.parse("https://www.linkedin.com/in/arsalan-ayaz-a35a9428a/?originalSubdomain=pk");
-                                if (await canLaunchUrl(url)) {
-                                  await launchUrl(url, mode: LaunchMode.externalApplication);
-                                } else {
-                                  debugPrint("Could not launch $url");
-                                }
-                              },
+                              onTap: (){},
 
                             ),
                             const SizedBox(

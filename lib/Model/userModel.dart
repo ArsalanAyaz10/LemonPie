@@ -3,12 +3,14 @@ class UserModel {
   final String username;
   final String email;
   final DateTime dateOfBirth;
+  final String profilePic; // Added profilePic field
 
   UserModel({
     required this.userId,
     required this.username,
     required this.email,
     required this.dateOfBirth,
+    required this.profilePic,
   });
 
   // Factory method to create a User instance from JSON
@@ -18,6 +20,7 @@ class UserModel {
       username: json['username'] ?? "Unknown",
       email: json['email'] ?? "No Email",
       dateOfBirth: DateTime.tryParse(json['date_of_birth'] ?? "") ?? DateTime(2000, 1, 1),
+      profilePic: json['profile_pic'] ?? "", // Get profile picture URL
     );
   }
 
@@ -28,6 +31,7 @@ class UserModel {
       'username': username,
       'email': email,
       'date_of_birth': dateOfBirth.toIso8601String(),
+      'profile_pic': profilePic, // Include profile picture URL
     };
   }
 }

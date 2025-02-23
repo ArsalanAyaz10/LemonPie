@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lemonpieui/Model/userModel.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -12,9 +14,7 @@ class ProfileScreen extends StatelessWidget {
       String? uid = FirebaseAuth.instance.currentUser?.uid;
 
       if (uid == null) {
-        if (kDebugMode) {
-          print("No user is logged in.");
-        }
+        print("No user is logged in.");
         return null;
       }
 
@@ -61,17 +61,49 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.blue,
-                        child: Icon(
-                          Icons.person,
-                          size: 50,
-                          color: Colors.white,
-                        ),
+                    Center(
+                child: Stack(
+                children: [
+                  const CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.blue,
+                   child:
+                    Icon(
+                    Icons.person,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 2,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 20,
+                        color: Colors.blue,
                       ),
                     ),
+                  ),
+                ),
+                ],
+                    ),),
                     const SizedBox(height: 20),
                     Center(
                       child: Text(
@@ -104,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                       title: const Text('Email'),
                       subtitle: Text(user.email ?? 'No Email'),
                     ),
-                    ListTile(
+                     ListTile(
                       leading: const Icon(Icons.calendar_today),
                       title: const Text('Date of Birth'),
                       subtitle: Text(user.dateOfBirth.toString() ?? 'Unknown'),
